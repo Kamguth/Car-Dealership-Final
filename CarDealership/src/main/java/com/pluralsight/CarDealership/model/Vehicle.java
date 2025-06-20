@@ -2,7 +2,7 @@ package com.pluralsight.CarDealership.model;
 
 
 public class Vehicle {
-    private int vin;
+    private String vin;
     private int year;
     private String make;
     private String model;
@@ -12,7 +12,7 @@ public class Vehicle {
     private double price;
 
     // Full constructor with all fields
-    public Vehicle(int vin, int year, String make, String model, String type, String color, int odometer, double price) {
+    public Vehicle(String vin, int year, String make, String model, String type, String color, int odometer, double price) {
         this.vin = vin;
         this.year = year;
         this.make = String.valueOf(make);
@@ -30,7 +30,7 @@ public class Vehicle {
         return vin;
     }
 
-    public void setVin(int vin) {
+    public void setVin(String vin) {
         this.vin = vin;
     }
 

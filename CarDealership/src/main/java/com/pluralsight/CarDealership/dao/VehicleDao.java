@@ -9,4 +9,10 @@ public interface VehicleDao {
     Vehicle getVehicleByVin(String vin);
     List<Vehicle> getVehiclesByDealershipId(int dealershipId);
     void markVehicleAsSold(String vin);
+
+    void addVehicle(Vehicle vehicle);
+
+    void updateVehicle(String vin, Vehicle updated);
+
+    void deleteVehicle(String vin);
 }

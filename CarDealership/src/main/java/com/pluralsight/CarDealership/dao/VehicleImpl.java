@@ -2,6 +2,7 @@ package com.pluralsight.CarDealership.dao;
 
 import com.pluralsight.CarDealership.model.Vehicle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -9,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Component
 public class VehicleImpl implements com.pluralsight.CarDealership.dao.VehicleDao {
 
     private final DataSource dataSource;
@@ -111,5 +112,67 @@ public class VehicleImpl implements com.pluralsight.CarDealership.dao.VehicleDao
                 rs.getBoolean("sold")
         );
     }
+
+    @Override
+    public void addVehicle(Vehicle vehicle) {
+        String sql = "INSERT INTO Vehicles (VIN, year, make, model, type, color, mileage, price, sold) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, vehicle.getVin());
+            stmt.setInt(2, vehicle.getYear());
+            stmt.setString(3, vehicle.getMake());
+            stmt.setString(4, vehicle.getModel());
+            stmt.setString(5, vehicle.getType());
+            stmt.setString(6, vehicle.getColor());
+            stmt.setInt(7, vehicle.getOdometer());
+            stmt.setDouble(8, vehicle.getPrice());
+            stmt.setBoolean(9, false); // New vehicles default to unsold
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateVehicle(String vin, Vehicle updated) {
+        String sql = "UPDATE Vehicles SET year = ?, make = ?, model = ?, type = ?, color = ?, mileage = ?, price = ? WHERE VIN = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, updated.getYear());
+            stmt.setString(2, updated.getMake());
+            stmt.setString(3, updated.getModel());
+            stmt.setString(4, updated.getType());
+            stmt.setString(5, updated.getColor());
+            stmt.setInt(6, updated.getOdometer());
+            stmt.setDouble(7, updated.getPrice());
+            stmt.setString(8, vin);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteVehicle(String vin) {
+        String sql = "DELETE FROM Vehicles WHERE VIN = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, vin);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
 
